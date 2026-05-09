@@ -8,15 +8,74 @@
   </head>
   <body>
     <div class="container">
-      <header class="header">
-        <h1>Good Morning Edil</h1>
-      </header>
-      <form id="form" action="">
-        <input id="taskInput" type="text" placeholder="Write your task" />
-        <button id="newTask" type="submit">+</button>
-      </form>
-      <ul id="task-list"></ul>
-      <!-- <ul ></ul> -->
+      <div class="welcome-display">
+        <img src="./img/productivity-image.png" alt="productivity-image" />
+        <h1>Get Ready To Organise Your Life</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil, neque
+          veritatis consequuntur consequatur molestiae saepe voluptatibus ipsum
+          commodi reiciendis! Modi nesciunt architecto quod adipisci facere,
+          impedit deleniti eos cumque obcaecati?
+        </p>
+        <form id="welcomeForm" action="">
+          <input
+            class="taskInput"
+            id="welcomeInput"
+            type="text"
+            placeholder="Enter Your Name"
+          />
+          <button id="welcomeBtn" type="submit">Get Started</button>
+        </form>
+      </div>
+      <header class="header"></header>
+      <div class="section-display">
+        <ul>
+          <li>
+            <div class="task-item category">
+              <div class="task-test today-category">
+                <img src="./img/sun (1).png" alt="Shopping" />
+                <p>Today</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="task-item category">
+              <div class="task-test personal-category">
+                <img src="./img/woman.png" alt="Shopping" />
+                <p>Personal</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="task-item category">
+              <div class="task-test work-category">
+                <img src="./img/working.png" alt="Shopping" />
+                <p>Work</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="task-item category">
+              <div class="task-test shopping-category">
+                <img src="./img/trolley (1).png" alt="Shopping" />
+                <p>Shopping List</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="main-display">
+        <form id="form" action="">
+          <input
+            class="taskInput"
+            id="taskInput"
+            type="text"
+            placeholder="Write your task"
+          />
+          <button id="newTask" type="submit">+</button>
+        </form>
+        <ul id="task-list"></ul>
+      </div>
     </div>
     <script src="./script.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
