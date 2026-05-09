@@ -3,23 +3,38 @@ const taskInput = document.querySelector('#taskInput')
 const listContainer = document.querySelector('#task-list')
 const editBtns = document.querySelectorAll('.editBtn')
 
-const task = [];
+let  task = [];
 let num = 1
+let editingItemId = null
+
 
 const handleSubmitbtn = (e) => {
     e.preventDefault();
 
-    //todo if input is empty you can't submit ✅
     const value = taskInput.value.trim()
 
-    if(!value) {
-        return
+    if(!value) return
+
+    if (editingItemId !== null) {
+        // * need to understad more
+        task = task.map(eachTask => {
+            if (eachTask.id === editingItemId) {
+                return { ...eachTask, task: value };
+            }
+            return eachTask;
+        });
+        console.log('UPDATED EDITED TASK:', task);
+        
+
+        editingTaskId = null; // reset edit mode
     } else {
-    task.push({id: num++, task: value, completed: false})
-    console.log(task);
+        task.push({id: num++, task: value, completed: false})
+        console.log('CREATING TASK', task);
+        
+    }
+
     taskInput.value = ''
     renderTaskList()
-    }
 }
 
 const renderTaskList = () => {
@@ -48,20 +63,27 @@ const renderTaskList = () => {
 
 
 listContainer.addEventListener('click', (e) => {
+    const id = Number(e.target.dataset.id)
     if (e.target.classList.contains('deleteBtn')) {
-        const id = Number(e.target.dataset.id)
         handleDeleteBtn(id)
+    }
+
+    if (e.target.classList.contains('editBtn')) {
+        handleEditBtn(id)
     }
 })
 
 const handleDeleteBtn = (id) => {
     task.splice(0, task.length, ...task.filter(eachTask => eachTask.id !== id))
-    console.log('REMOVE TASK', task)
+    console.log('DELETED TASK', task)
     renderTaskList()
 }
 
-const handleEditBtn = () => {
-    console.log('Edit')
+const handleEditBtn = (id) => {    
+    const found = task.find(eashTask =>  eashTask.id === id)
+    taskInput.value = found.task; 
+    editingItemId = id
 }
+
 
 form.addEventListener('submit', handleSubmitbtn)
