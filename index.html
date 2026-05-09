@@ -7,7 +7,15 @@
     <title>Todo List</title>
   </head>
   <body>
-    <h1>Todo List</h1>
-    <script src="./script.js"></script>
+    <div class="container">
+      <form id="form" action="">
+        <input id="taskInput" type="text" placeholder="Write your task" />
+        <button id="newTask" type="submit">+</button>
+      </form>
+      <ul id="task-list"></ul>
+      <!-- <ul ></ul> -->
+    </div>
+    <script src="./script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
   </body>
 </html>
