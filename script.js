@@ -9,38 +9,56 @@ const main = document.querySelector('.main-display')
 const headingContainer = document.querySelector('.header')
 const category = document.querySelectorAll('.category')
 
-let  task = [];
 let num = 1
 let editingItemId = null
+let currentCategoryId = null
+const data = [
+    {
+        id: 1,
+        categoryName: 'Today',
+        todos: []
+    },
+    {
+        id: 2,
+        categoryName: 'Personal',
+        todos: []
+    },
+    {
+        id: 3,
+        categoryName: 'Work',
+        todos: []
+    },
+    {
+        id: 4,
+        categoryName: 'Shopping',
+        todos: []
+    }
+]
 
 
 const handleSubmitbtn = (e) => {
     e.preventDefault();
 
-    const value = taskInput.value.trim()
+    const value = taskInput.value.trim();
+    if (!value || !currentCategoryId) return;
 
-    if(!value) return
-
+    const selectedCategory = data.find(todo => todo.id === currentCategoryId);
     if (editingItemId !== null) {
-        // * need to understad more
-        task = task.map(eachTask => {
-            if (eachTask.id === editingItemId) {
-                return { ...eachTask, task: value };
-            }
-            return eachTask;
-        });
-        console.log('UPDATED EDITED TASK:', task);
-        
-
-        editingTaskId = null; // reset edit mode
+        const todo = selectedCategory.todos.find(t => t.id === editingItemId);
+        todo.task = value;
+        console.log('UPDATED EDITED TASK:', selectedCategory.todos);
+        editingItemId = null;
     } else {
-        task.push({id: num++, task: value, completed: false})
-        console.log('CREATING TASK', task);
-        
+        selectedCategory.todos.push({
+            id: num++,
+            task: value,
+            completed: false
+        });
+        console.log('CREATING TASK', selectedCategory.todos);
     }
 
-    taskInput.value = ''
-    renderTaskList()
+    taskInput.value = '';
+    renderTaskList(selectedCategory.todos);
 }
 
 const handleWelcomeSubmitbtn = (e) => {
@@ -67,34 +85,29 @@ const handleWelcomeSubmitbtn = (e) => {
     
 }
 
-const handleSection = (e) => {
-    console.log('hello');
-        section.style.display = 'none'
-        main.style.display = 'block'
-}
-
-const renderTaskList = () => {
+const renderTaskList = (todosArr) => {
     listContainer.innerHTML = ''  // clear list first
 
-    task.forEach((eachTask) => {
+    todosArr.forEach((todo) => {
 
         const list = document.createElement('li')
 
         list.innerHTML = `
             <div class="task-item">
                 <div class="task-test">
-                    <input type="checkbox" class="checkbox" data-id="${eachTask.id}" ${eachTask.completed ? 'checked' : ''}>
-                    <p class="${eachTask.completed ? 'completed' : ''}"> ${eachTask.task}</p>
+                    <input type="checkbox" class="checkbox" data-id="${todo.id}" ${todo.completed ? 'checked' : ''}>
+                    <p class="${todo.completed ? 'completed' : ''}"> ${todo.task}</p>
                 </div>
                 <div class="icons">
-                    <img src="./img/tabler--edit.png" alt="edit-icon" class="editBtn" data-id="${eachTask.id}">
-                    <img src="./img/bin.png" alt="bin-icon" class="deleteBtn" data-id="${eachTask.id}">
+                    <img src="./img/tabler--edit.png" alt="edit-icon" class="editBtn" data-id="${todo.id}">
+                    <img src="./img/bin.png" alt="bin-icon" class="deleteBtn" data-id="${todo.id}">
                 </div>
             </div>
         `
 
         listContainer.appendChild(list)
     })
+
 }
 
 
@@ -111,35 +124,54 @@ listContainer.addEventListener('click', (e) => {
     // 🔹 CHECKBOX TOGGLE
 if (e.target.classList.contains('checkbox')) {
 
-    const id = Number(e.target.dataset.id);
+    const selectedCategory = data.find(cat => cat.id === currentCategoryId);
 
-    task = task.map(eachTask => {
-        if (eachTask.id === id) {
-            return { ...eachTask, completed: !eachTask.completed };
-        }
-        return eachTask;
-    });
+    const todo = selectedCategory.todos.find(t => t.id === id);
 
-    renderTaskList();
+    todo.completed = !todo.completed;
+
+    renderTaskList(selectedCategory.todos);
 }
 })
 
 
 const handleDeleteBtn = (id) => {
-    task.splice(0, task.length, ...task.filter(eachTask => eachTask.id !== id))
-    console.log('DELETED TASK', task)
-    renderTaskList()
+
+    const selectedCategory = data.find(cat => cat.id === currentCategoryId);
+
+    selectedCategory.todos = selectedCategory.todos.filter(todo => todo.id !== id);
+    
+    console.log('DELETING TASK', selectedCategory.todos);
+
+    renderTaskList(selectedCategory.todos);
 }
 
-const handleEditBtn = (id) => {    
-    const found = task.find(eashTask =>  eashTask.id === id)
-    taskInput.value = found.task; 
-    editingItemId = id
+const handleEditBtn = (id) => {
+
+    const selectedCategory = data.find(cat => cat.id === currentCategoryId);
+
+    const found = selectedCategory.todos.find(todo => todo.id === id);
+
+    taskInput.value = found.task;
+
+    editingItemId = id;
 }
 
 
-category.forEach((category) => {
-    category.addEventListener('click', handleSection)
+category.forEach((category, i) => {
+    category.addEventListener('click', (e) => {
+        currentCategoryId = data[i].id
+
+        console.log(currentCategoryId);
+
+        const findDataById = data.find(({id}) => id === currentCategoryId)
+        console.log(findDataById);
+        
+
+        section.style.display = 'none'
+        main.style.display = 'block'
+        renderTaskList(findDataById.todos)
+    })
 })
 
 welcomeForm.addEventListener('submit', handleWelcomeSubmitbtn)
