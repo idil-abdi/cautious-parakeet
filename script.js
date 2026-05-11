@@ -35,33 +35,7 @@ const data = [
     }
 ]
 
-
-const handleSubmitbtn = (e) => {
-    e.preventDefault();
-
-    const value = taskInput.value.trim();
-    if (!value || !currentCategoryId) return;
-
-    const selectedCategory = data.find(todo => todo.id === currentCategoryId);
-    if (editingItemId !== null) {
-        const todo = selectedCategory.todos.find(t => t.id === editingItemId);
-        todo.task = value;
-        console.log('UPDATED EDITED TASK:', selectedCategory.todos);
-        editingItemId = null;
-    } else {
-        selectedCategory.todos.push({
-            id: num++,
-            task: value,
-            completed: false
-        });
-        console.log('CREATING TASK', selectedCategory.todos);
-    }
-
-    taskInput.value = '';
-    renderTaskList(selectedCategory.todos);
-}
-
-const handleWelcomeSubmitbtn = (e) => {
+welcomeForm.addEventListener('submit', (e) => {
     e.preventDefault()
     
     const username = welcomeInput.value.trim()
@@ -79,11 +53,57 @@ const handleWelcomeSubmitbtn = (e) => {
 
         // main.style.display = 'block'
     }
-
+    
     headingContainer.appendChild(heading)
     console.log(`Welcome ${username}`);
+})
+
+category.forEach((category, i) => {
+    category.addEventListener('click', (e) => {
+        
+        currentCategoryId = data[i].id
+        
+        console.log(currentCategoryId);
+        
+        const findDataById = data.find(({id}) => id === currentCategoryId)
+        console.log(findDataById);
+        
+        const para = document.createElement('p')
+        para.innerHTML = `This Is The ${findDataById.categoryName} Category`;
+        headingContainer.appendChild(para)
+
+        section.style.display = 'none'
+        main.style.display = 'block'
+        renderTaskList(findDataById.todos)
+    })
+})
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
     
-}
+    const value = taskInput.value.trim();
+    
+    if (!value || !currentCategoryId) return;
+    
+    const selectedCategory = data.find(todo => todo.id === currentCategoryId);
+
+    if (editingItemId !== null) {
+        const todo = selectedCategory.todos.find(t => t.id === editingItemId);
+        todo.task = value;
+        console.log('UPDATED EDITED TASK:', selectedCategory.todos);
+        editingItemId = null;
+    } else {
+        selectedCategory.todos.push({
+            id: num++,
+            task: value,
+            completed: false
+        });
+        console.log('CREATING TASK', selectedCategory);
+    }
+    
+    taskInput.value = '';
+    renderTaskList(selectedCategory.todos);
+})
 
 const renderTaskList = (todosArr) => {
     listContainer.innerHTML = ''  // clear list first
@@ -102,8 +122,7 @@ const renderTaskList = (todosArr) => {
                     <img src="./img/tabler--edit.png" alt="edit-icon" class="editBtn" data-id="${todo.id}">
                     <img src="./img/bin.png" alt="bin-icon" class="deleteBtn" data-id="${todo.id}">
                 </div>
-            </div>
-        `
+            </div>`
 
         listContainer.appendChild(list)
     })
@@ -113,6 +132,7 @@ const renderTaskList = (todosArr) => {
 
 listContainer.addEventListener('click', (e) => {
     const id = Number(e.target.dataset.id)
+
     if (e.target.classList.contains('deleteBtn')) {
         handleDeleteBtn(id)
     }
@@ -122,58 +142,25 @@ listContainer.addEventListener('click', (e) => {
     }
 
     // 🔹 CHECKBOX TOGGLE
-if (e.target.classList.contains('checkbox')) {
-
-    const selectedCategory = data.find(cat => cat.id === currentCategoryId);
-
-    const todo = selectedCategory.todos.find(t => t.id === id);
-
-    todo.completed = !todo.completed;
-
-    renderTaskList(selectedCategory.todos);
-}
+    if (e.target.classList.contains('checkbox')) {
+        const selectedCategory = data.find(cat => cat.id === currentCategoryId);
+        const todo = selectedCategory.todos.find(t => t.id === id);
+        todo.completed = !todo.completed;
+        renderTaskList(selectedCategory.todos);
+    }
 })
 
 
 const handleDeleteBtn = (id) => {
-
-    const selectedCategory = data.find(cat => cat.id === currentCategoryId);
-
+    const selectedCategory = data.find(category => category.id === currentCategoryId);
     selectedCategory.todos = selectedCategory.todos.filter(todo => todo.id !== id);
-    
     console.log('DELETING TASK', selectedCategory.todos);
-
     renderTaskList(selectedCategory.todos);
 }
 
 const handleEditBtn = (id) => {
-
-    const selectedCategory = data.find(cat => cat.id === currentCategoryId);
-
+    const selectedCategory = data.find(category => category.id === currentCategoryId);
     const found = selectedCategory.todos.find(todo => todo.id === id);
-
     taskInput.value = found.task;
-
     editingItemId = id;
 }
-
-
-category.forEach((category, i) => {
-    category.addEventListener('click', (e) => {
-        currentCategoryId = data[i].id
-
-        console.log(currentCategoryId);
-
-        const findDataById = data.find(({id}) => id === currentCategoryId)
-        console.log(findDataById);
-        
-
-        section.style.display = 'none'
-        main.style.display = 'block'
-        renderTaskList(findDataById.todos)
-    })
-})
-
-welcomeForm.addEventListener('submit', handleWelcomeSubmitbtn)
-
-form.addEventListener('submit', handleSubmitbtn)

@@ -1,3 +1,5 @@
+@use './form.scss';
+
 * {
     margin: 0;
     padding: 0;
@@ -20,60 +22,16 @@ body{
 
 .container{
     background-color: #f3f3f3;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
-    // flex-direction: column;
     margin: 50px 10px;
     max-width: 450px;
     border: 2px solid var(--cream);
     padding-bottom:30px;
     border-radius: 9px;
-    overflow: hidden;
-
-}
-
-// basic form design
-form {
-    width: 100%;
-    display: flex;
-    gap: 10px;
-    padding: 0 10px;
-
-    input{
-        flex: 1;
-        padding: 16px;
-        border: 2px solid var(--cream);
-        border-radius: 10px;
-        color: var(--text);
-        outline: none;
-    }
-
-    button{
-        padding: 16px;
-        width: 50px;
-        height: 50px;
-        border-radius: 10px;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--cream);
-        color: var(--text);
-        font-size: 30px;
-        font-weight: bold;
-        outline: none;
-        cursor: pointer;
-    }
 }
 
 .welcome-display{
-    // display: none;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
     text-align: center;
-    gap: 10px;
     font-size:  0.8rem;
 
     h1, p {
@@ -86,17 +44,18 @@ form {
     form {
         flex-direction: column;
         margin-top: 10px;
-
         input{
             text-align: center;
             font-size:  1rem;
             padding: 10px;
-
         }
         button{
             width: 100%;
             font-size: 1rem;
-    }
+            &:hover{
+                background-color: rgba(255, 197, 159,0.6);
+            }
+        }
     }
 }
 
@@ -110,23 +69,18 @@ form {
 
         li {
             list-style: none;
-            .task-item{
-                width: 100%;
-                display: flex;
-                padding: 10px;
+            cursor: pointer;
+            &:hover {
+                background-color: var(--cream);
                 border-radius: 10px;
-                border: 2px solid var(--cream);
-                justify-content: space-between;
-                align-items: center;
-        
-                img{
-                    width: 45px;
-                    height: 45px;
-                }
-            } 
-        }
+                
+            }
+            img{
+                width: 45px;
+                height: 45px;
+            }
+        }    
     }
-
 }
 .main-display{
     display: none;
@@ -142,6 +96,7 @@ form {
     display: none;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 
     h1 {
         padding: 0 10px;
