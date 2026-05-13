@@ -185,6 +185,3 @@ const handleEditBtn = (id) => {
     editingItemId = id;
     saveToLocalStorage()
 }
-
-// todo - things i could add to my project
-// add and deleting categories and local storage
