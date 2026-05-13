@@ -28,4 +28,7 @@ A category-based todo list application built with vanilla JavaScript. Users can 
 - Event delegation  
 - State management using objects and arrays  
 - DOM manipulation  
-- Data persistence with local storage  
+- Data persistence with local storage
+
+---
+Demo Link: [Category Todo App](https://idil-abdi.github.io/cautious-parakeet/)
