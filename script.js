@@ -35,6 +35,22 @@ const data = [
     }
 ]
 
+const loadFromLocalStorage = () => {
+
+    const storedData = localStorage.getItem('todoData')
+
+    if (storedData) {
+        const parsedData = JSON.parse(storedData)
+
+        data.length = 0
+        data.push(...parsedData)
+    }
+}
+
+const saveToLocalStorage = () => {
+    localStorage.setItem('todoData', JSON.stringify(data))
+}
+
 welcomeForm.addEventListener('submit', (e) => {
     e.preventDefault()
     
@@ -55,6 +71,7 @@ welcomeForm.addEventListener('submit', (e) => {
     }
     
     headingContainer.appendChild(heading)
+    loadFromLocalStorage()
     console.log(`Welcome ${username}`);
 })
 
@@ -102,6 +119,7 @@ form.addEventListener('submit', (e) => {
     }
     
     taskInput.value = '';
+    saveToLocalStorage()
     renderTaskList(selectedCategory.todos);
 })
 
@@ -146,6 +164,7 @@ listContainer.addEventListener('click', (e) => {
         const selectedCategory = data.find(cat => cat.id === currentCategoryId);
         const todo = selectedCategory.todos.find(t => t.id === id);
         todo.completed = !todo.completed;
+        saveToLocalStorage()
         renderTaskList(selectedCategory.todos);
     }
 })
@@ -155,6 +174,7 @@ const handleDeleteBtn = (id) => {
     const selectedCategory = data.find(category => category.id === currentCategoryId);
     selectedCategory.todos = selectedCategory.todos.filter(todo => todo.id !== id);
     console.log('DELETING TASK', selectedCategory.todos);
+    saveToLocalStorage()
     renderTaskList(selectedCategory.todos);
 }
 
@@ -163,4 +183,8 @@ const handleEditBtn = (id) => {
     const found = selectedCategory.todos.find(todo => todo.id === id);
     taskInput.value = found.task;
     editingItemId = id;
+    saveToLocalStorage()
 }
+
+// todo - things i could add to my project
+// add and deleting categories and local storage
